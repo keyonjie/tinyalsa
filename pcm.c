@@ -659,7 +659,10 @@ struct pcm *pcm_open(unsigned int card, unsigned int device,
                    pcm_format_to_alsa(config->format));
     param_set_mask(&params, SNDRV_PCM_HW_PARAM_SUBFORMAT,
                    SNDRV_PCM_SUBFORMAT_STD);
-    param_set_min(&params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, config->period_size);
+    param_set_int(&params, SNDRV_PCM_HW_PARAM_BUFFER_SIZE, config->period_size * config->period_count);
+    param_set_int(&params, SNDRV_PCM_HW_PARAM_BUFFER_BYTES,
+                  config->period_size * config->period_count * (pcm_format_to_bits(config->format) / 8) * config->channels);
+    param_set_int(&params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, config->period_size);
     param_set_int(&params, SNDRV_PCM_HW_PARAM_SAMPLE_BITS,
                   pcm_format_to_bits(config->format));
     param_set_int(&params, SNDRV_PCM_HW_PARAM_FRAME_BITS,
